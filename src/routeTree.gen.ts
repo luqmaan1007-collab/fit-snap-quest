@@ -19,6 +19,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedGroupsRouteImport } from './routes/_authenticated/groups'
 import { Route as AuthenticatedFriendsRouteImport } from './routes/_authenticated/friends'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as ApiPublicBootstrapOwnersRouteImport } from './routes/api/public/bootstrap-owners'
 import { Route as AuthenticatedGroupsIdRouteImport } from './routes/_authenticated/groups.$id'
 import { Route as AuthenticatedFriendsIdRouteImport } from './routes/_authenticated/friends.$id'
 
@@ -71,6 +72,12 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicBootstrapOwnersRoute =
+  ApiPublicBootstrapOwnersRouteImport.update({
+    id: '/api/public/bootstrap-owners',
+    path: '/api/public/bootstrap-owners',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AuthenticatedGroupsIdRoute = AuthenticatedGroupsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/steps': typeof AuthenticatedStepsRoute
   '/friends/$id': typeof AuthenticatedFriendsIdRoute
   '/groups/$id': typeof AuthenticatedGroupsIdRoute
+  '/api/public/bootstrap-owners': typeof ApiPublicBootstrapOwnersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -107,6 +115,7 @@ export interface FileRoutesByTo {
   '/steps': typeof AuthenticatedStepsRoute
   '/friends/$id': typeof AuthenticatedFriendsIdRoute
   '/groups/$id': typeof AuthenticatedGroupsIdRoute
+  '/api/public/bootstrap-owners': typeof ApiPublicBootstrapOwnersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,6 +131,7 @@ export interface FileRoutesById {
   '/_authenticated/steps': typeof AuthenticatedStepsRoute
   '/_authenticated/friends/$id': typeof AuthenticatedFriendsIdRoute
   '/_authenticated/groups/$id': typeof AuthenticatedGroupsIdRoute
+  '/api/public/bootstrap-owners': typeof ApiPublicBootstrapOwnersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -137,6 +147,7 @@ export interface FileRouteTypes {
     | '/steps'
     | '/friends/$id'
     | '/groups/$id'
+    | '/api/public/bootstrap-owners'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/steps'
     | '/friends/$id'
     | '/groups/$id'
+    | '/api/public/bootstrap-owners'
   id:
     | '__root__'
     | '/'
@@ -164,12 +176,14 @@ export interface FileRouteTypes {
     | '/_authenticated/steps'
     | '/_authenticated/friends/$id'
     | '/_authenticated/groups/$id'
+    | '/api/public/bootstrap-owners'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicBootstrapOwnersRoute: typeof ApiPublicBootstrapOwnersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -244,6 +258,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/bootstrap-owners': {
+      id: '/api/public/bootstrap-owners'
+      path: '/api/public/bootstrap-owners'
+      fullPath: '/api/public/bootstrap-owners'
+      preLoaderRoute: typeof ApiPublicBootstrapOwnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/groups/$id': {
       id: '/_authenticated/groups/$id'
       path: '/$id'
@@ -310,6 +331,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicBootstrapOwnersRoute: ApiPublicBootstrapOwnersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
