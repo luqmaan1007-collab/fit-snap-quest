@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery, queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getDashboard } from "@/lib/social.functions";
 import { Ring, MacroBar } from "@/components/Ring";
@@ -8,21 +8,11 @@ import { Camera, Flame, Beef, Wheat, Droplet, Footprints, Sparkles } from "lucid
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({ meta: [{ title: "Today — Snapcal" }] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(dashOpts()),
   component: Dashboard,
 });
 
-function dashOpts() {
-  return queryOptions({
-    queryKey: ["dashboard"],
-    queryFn: () => getDashboardFn(),
-  });
-}
-let getDashboardFn: () => ReturnType<typeof getDashboard> = () => { throw new Error("not ready"); };
-
 function Dashboard() {
   const fn = useServerFn(getDashboard);
-  getDashboardFn = fn;
   const { data } = useQuery({ queryKey: ["dashboard"], queryFn: () => fn() });
   if (!data) return <div className="p-6 text-muted-foreground">Loading…</div>;
 

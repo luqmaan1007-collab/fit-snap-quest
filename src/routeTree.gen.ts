@@ -12,7 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedStepsRouteImport } from './routes/_authenticated/steps'
+import { Route as AuthenticatedSnapRouteImport } from './routes/_authenticated/snap'
+import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedGroupsRouteImport } from './routes/_authenticated/groups'
+import { Route as AuthenticatedFriendsRouteImport } from './routes/_authenticated/friends'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedGroupsIdRouteImport } from './routes/_authenticated/groups.$id'
+import { Route as AuthenticatedFriendsIdRouteImport } from './routes/_authenticated/friends.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -28,40 +36,134 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedStepsRoute = AuthenticatedStepsRouteImport.update({
+  id: '/steps',
+  path: '/steps',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSnapRoute = AuthenticatedSnapRouteImport.update({
+  id: '/snap',
+  path: '/snap',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedGroupsRoute = AuthenticatedGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedFriendsRoute = AuthenticatedFriendsRouteImport.update({
+  id: '/friends',
+  path: '/friends',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedGroupsIdRoute = AuthenticatedGroupsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedGroupsRoute,
+} as any)
+const AuthenticatedFriendsIdRoute = AuthenticatedFriendsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AuthenticatedFriendsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/friends': typeof AuthenticatedFriendsRouteWithChildren
+  '/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/snap': typeof AuthenticatedSnapRoute
+  '/steps': typeof AuthenticatedStepsRoute
+  '/friends/$id': typeof AuthenticatedFriendsIdRoute
+  '/groups/$id': typeof AuthenticatedGroupsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/friends': typeof AuthenticatedFriendsRouteWithChildren
+  '/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
+  '/settings': typeof AuthenticatedSettingsRoute
+  '/snap': typeof AuthenticatedSnapRoute
+  '/steps': typeof AuthenticatedStepsRoute
+  '/friends/$id': typeof AuthenticatedFriendsIdRoute
+  '/groups/$id': typeof AuthenticatedGroupsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/friends': typeof AuthenticatedFriendsRouteWithChildren
+  '/_authenticated/groups': typeof AuthenticatedGroupsRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
+  '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/snap': typeof AuthenticatedSnapRoute
+  '/_authenticated/steps': typeof AuthenticatedStepsRoute
+  '/_authenticated/friends/$id': typeof AuthenticatedFriendsIdRoute
+  '/_authenticated/groups/$id': typeof AuthenticatedGroupsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/onboarding'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/friends'
+    | '/groups'
+    | '/onboarding'
+    | '/settings'
+    | '/snap'
+    | '/steps'
+    | '/friends/$id'
+    | '/groups/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/onboarding'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/friends'
+    | '/groups'
+    | '/onboarding'
+    | '/settings'
+    | '/snap'
+    | '/steps'
+    | '/friends/$id'
+    | '/groups/$id'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/friends'
+    | '/_authenticated/groups'
     | '/_authenticated/onboarding'
+    | '/_authenticated/settings'
+    | '/_authenticated/snap'
+    | '/_authenticated/steps'
+    | '/_authenticated/friends/$id'
+    | '/_authenticated/groups/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -93,6 +195,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/steps': {
+      id: '/_authenticated/steps'
+      path: '/steps'
+      fullPath: '/steps'
+      preLoaderRoute: typeof AuthenticatedStepsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/snap': {
+      id: '/_authenticated/snap'
+      path: '/snap'
+      fullPath: '/snap'
+      preLoaderRoute: typeof AuthenticatedSnapRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/settings': {
+      id: '/_authenticated/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedSettingsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/onboarding': {
       id: '/_authenticated/onboarding'
       path: '/onboarding'
@@ -100,15 +223,84 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/groups': {
+      id: '/_authenticated/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof AuthenticatedGroupsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/friends': {
+      id: '/_authenticated/friends'
+      path: '/friends'
+      fullPath: '/friends'
+      preLoaderRoute: typeof AuthenticatedFriendsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/groups/$id': {
+      id: '/_authenticated/groups/$id'
+      path: '/$id'
+      fullPath: '/groups/$id'
+      preLoaderRoute: typeof AuthenticatedGroupsIdRouteImport
+      parentRoute: typeof AuthenticatedGroupsRoute
+    }
+    '/_authenticated/friends/$id': {
+      id: '/_authenticated/friends/$id'
+      path: '/$id'
+      fullPath: '/friends/$id'
+      preLoaderRoute: typeof AuthenticatedFriendsIdRouteImport
+      parentRoute: typeof AuthenticatedFriendsRoute
+    }
   }
 }
 
+interface AuthenticatedFriendsRouteChildren {
+  AuthenticatedFriendsIdRoute: typeof AuthenticatedFriendsIdRoute
+}
+
+const AuthenticatedFriendsRouteChildren: AuthenticatedFriendsRouteChildren = {
+  AuthenticatedFriendsIdRoute: AuthenticatedFriendsIdRoute,
+}
+
+const AuthenticatedFriendsRouteWithChildren =
+  AuthenticatedFriendsRoute._addFileChildren(AuthenticatedFriendsRouteChildren)
+
+interface AuthenticatedGroupsRouteChildren {
+  AuthenticatedGroupsIdRoute: typeof AuthenticatedGroupsIdRoute
+}
+
+const AuthenticatedGroupsRouteChildren: AuthenticatedGroupsRouteChildren = {
+  AuthenticatedGroupsIdRoute: AuthenticatedGroupsIdRoute,
+}
+
+const AuthenticatedGroupsRouteWithChildren =
+  AuthenticatedGroupsRoute._addFileChildren(AuthenticatedGroupsRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedFriendsRoute: typeof AuthenticatedFriendsRouteWithChildren
+  AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRouteWithChildren
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
+  AuthenticatedSettingsRoute: typeof AuthenticatedSettingsRoute
+  AuthenticatedSnapRoute: typeof AuthenticatedSnapRoute
+  AuthenticatedStepsRoute: typeof AuthenticatedStepsRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedFriendsRoute: AuthenticatedFriendsRouteWithChildren,
+  AuthenticatedGroupsRoute: AuthenticatedGroupsRouteWithChildren,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
+  AuthenticatedSettingsRoute: AuthenticatedSettingsRoute,
+  AuthenticatedSnapRoute: AuthenticatedSnapRoute,
+  AuthenticatedStepsRoute: AuthenticatedStepsRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
