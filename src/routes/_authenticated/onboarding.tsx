@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useMutation, useServerFn } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { submitOnboarding, getMe } from "@/lib/profile.functions";
 import { useServerFn as useFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
