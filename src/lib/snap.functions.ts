@@ -141,7 +141,7 @@ No markdown, no commentary, no code fences. If the image is not food, set name t
       vit_b12_mcg: num("vit_b12_mcg"),
       iron_mg: num("iron_mg"),
       calcium_mg: num("calcium_mg"),
-      ai_raw: parsed,
+      ai_raw: parsed as never,
     };
 
     const { data: inserted, error: insErr } = await supabase.from("food_logs").insert(row).select().single();
