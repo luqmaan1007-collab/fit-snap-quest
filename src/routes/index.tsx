@@ -1,6 +1,7 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Camera, Users, Sparkles, Footprints } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { ForestScene } from "@/components/ForestScene";
 
 export const Route = createFileRoute("/")({
   ssr: false,
@@ -19,14 +20,16 @@ export const Route = createFileRoute("/")({
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-md px-6 pt-16 pb-12">
+    <div className="relative min-h-screen overflow-hidden bg-background">
+      <ForestScene />
+
+      <div className="relative z-10 mx-auto max-w-md px-6 pt-16 pb-12">
         <div className="text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-card/80 px-3 py-1 text-xs font-medium text-primary backdrop-blur">
             <Sparkles className="h-3 w-3" /> AI nutrition tracking
           </div>
-          <h1 className="mt-6 font-display text-5xl font-bold leading-[0.95] tracking-tight">
-            Snap it.<br/>
+          <h1 className="mt-6 font-display text-5xl font-bold leading-[0.95] tracking-tight text-foreground">
+            Snap it.<br />
             <span className="text-gradient-primary">Know it.</span>
           </h1>
           <p className="mt-4 text-base text-muted-foreground">
@@ -35,10 +38,10 @@ function Landing() {
         </div>
 
         <div className="mt-10 space-y-3">
-          <Link to="/onboarding" className="flex w-full items-center justify-center rounded-full bg-primary px-6 py-4 font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition active:scale-[0.98]">
+          <Link to="/onboarding" className="flex w-full items-center justify-center rounded-full bg-primary px-6 py-4 font-semibold text-primary-foreground shadow-lg shadow-primary/30 transition active:scale-[0.98]">
             Get started
           </Link>
-          <Link to="/auth" className="flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-4 font-medium text-foreground transition active:scale-[0.98]">
+          <Link to="/auth" className="flex w-full items-center justify-center rounded-full border border-border bg-card/80 px-6 py-4 font-medium text-foreground backdrop-blur transition active:scale-[0.98]">
             I have an account
           </Link>
         </div>
