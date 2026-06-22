@@ -60,6 +60,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
+    scripts: [
+      { src: "https://cdn.weglot.com/weglot.min.js", defer: true },
+      {
+        children: `window.addEventListener('load',function(){if(window.Weglot){Weglot.initialize({api_key:'${import.meta.env.VITE_WEGLOT_API_KEY ?? "wg_REPLACE_ME"}'});}});`,
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
