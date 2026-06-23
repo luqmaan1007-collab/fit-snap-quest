@@ -65,7 +65,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         children: `window.addEventListener('load',function(){if(window.Weglot){Weglot.initialize({api_key:'${import.meta.env.VITE_WEGLOT_API_KEY ?? "wg_REPLACE_ME"}'});}});`,
       },
+      {
+        src: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4190568082423357",
+        async: true,
+        crossOrigin: "anonymous",
+      },
     ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
