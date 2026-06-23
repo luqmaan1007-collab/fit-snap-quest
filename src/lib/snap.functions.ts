@@ -59,10 +59,14 @@ export const analyzeSnap = createServerFn({ method: "POST" })
     const roleNames = (roles ?? []).map((r) => r.role);
     const unlimited = roleNames.includes("pro") || roleNames.includes("owner");
     if (!unlimited) {
-      const { count } = await supabase.from("food_logs").select("*", { count: "exact", head: true })
-        .eq("user_id", userId).gte("logged_at", startOfTodayIso());
-      if ((count ?? 0) >= FREE_DAILY_LIMIT) {
-        throw new Error("Daily snap limit reached. Upgrade to Pro for unlimited snaps.");
+      const [{ count }, { count: bonus }] = await Promise.all([
+        supabase.from("food_logs").select("*", { count: "exact", head: true })
+          .eq("user_id", userId).gte("logged_at", startOfTodayIso()),
+        supabase.from("snap_bonuses").select("*", { count: "exact", head: true })
+          .eq("user_id", userId).eq("earned_on", todayUtcDate()),
+      ]);
+      if ((count ?? 0) >= FREE_DAILY_LIMIT + (bonus ?? 0)) {
+        throw new Error("Daily snap limit reached. Watch an ad for +1 or upgrade to Pro.");
       }
     }
 
