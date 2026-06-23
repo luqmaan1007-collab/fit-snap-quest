@@ -98,8 +98,11 @@ function SnapPage() {
             {blocked && (
               <div className="rounded-2xl border border-accent/40 bg-accent/10 p-4 text-center text-sm">
                 <div className="font-semibold text-accent">Daily limit reached</div>
-                <div className="mt-1 text-xs text-muted-foreground">Upgrade to Pro for unlimited snaps.</div>
-                <Button className="mt-3 w-full rounded-full bg-accent text-accent-foreground" onClick={() => navigate({ to: "/settings" })}>Upgrade to Pro</Button>
+                <div className="mt-1 text-xs text-muted-foreground">Watch a quick ad for +1 snap, or upgrade to Pro.</div>
+                <Button className="mt-3 w-full rounded-full bg-primary text-primary-foreground" onClick={() => setAdOpen(true)} disabled={bonusMut.isPending}>
+                  <PlayCircle className="mr-2 h-4 w-4" /> Watch ad for +1 snap
+                </Button>
+                <Button variant="outline" className="mt-2 w-full rounded-full" onClick={() => navigate({ to: "/settings" })}>Upgrade to Pro</Button>
               </div>
             )}
           </div>
@@ -107,6 +110,8 @@ function SnapPage() {
       </Card>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">AI nutrition is an estimate — adjust if needed.</p>
+
+      <RewardedAd open={adOpen} onClose={() => setAdOpen(false)} onReward={() => bonusMut.mutate()} />
     </div>
   );
 }
