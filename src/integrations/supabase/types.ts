@@ -250,6 +250,30 @@ export type Database = {
         }
         Relationships: []
       }
+      snap_bonuses: {
+        Row: {
+          created_at: string
+          earned_on: string
+          id: string
+          source: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          earned_on?: string
+          id?: string
+          source?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          earned_on?: string
+          id?: string
+          source?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       step_logs: {
         Row: {
           date: string

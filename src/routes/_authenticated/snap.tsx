@@ -2,11 +2,12 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useRef } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { analyzeSnap, getSnapQuota } from "@/lib/snap.functions";
+import { analyzeSnap, getSnapQuota, grantBonusSnap } from "@/lib/snap.functions";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Camera, Upload, Sparkles, Check, X } from "lucide-react";
+import { Camera, Upload, Sparkles, Check, X, PlayCircle } from "lucide-react";
 import { toast } from "sonner";
+import { RewardedAd } from "@/components/RewardedAd";
 
 export const Route = createFileRoute("/_authenticated/snap")({
   head: () => ({ meta: [{ title: "Snap a meal — Snapcal" }] }),
@@ -18,10 +19,9 @@ function SnapPage() {
   const qc = useQueryClient();
   const analyzeFn = useServerFn(analyzeSnap);
   const quotaFn = useServerFn(getSnapQuota);
+  const grantFn = useServerFn(grantBonusSnap);
   const { data: quota } = useQuery({ queryKey: ["snap-quota"], queryFn: () => quotaFn() });
-
-  const [preview, setPreview] = useState<string | null>(null);
-  const fileRef = useRef<HTMLInputElement>(null);
+  const [adOpen, setAdOpen] = useState(false);
 
   const mut = useMutation({
     mutationFn: (b64: string) => analyzeFn({ data: { imageBase64: b64, mime: "image/jpeg" } }),
@@ -33,6 +33,15 @@ function SnapPage() {
     },
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const bonusMut = useMutation({
+    mutationFn: () => grantFn(),
+    onSuccess: () => { toast.success("+1 snap added!"); qc.invalidateQueries({ queryKey: ["snap-quota"] }); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const [preview, setPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   async function onFile(f: File) {
     // Compress to ~1024px max edge for cost/latency
@@ -89,8 +98,11 @@ function SnapPage() {
             {blocked && (
               <div className="rounded-2xl border border-accent/40 bg-accent/10 p-4 text-center text-sm">
                 <div className="font-semibold text-accent">Daily limit reached</div>
-                <div className="mt-1 text-xs text-muted-foreground">Upgrade to Pro for unlimited snaps.</div>
-                <Button className="mt-3 w-full rounded-full bg-accent text-accent-foreground" onClick={() => navigate({ to: "/settings" })}>Upgrade to Pro</Button>
+                <div className="mt-1 text-xs text-muted-foreground">Watch a quick ad for +1 snap, or upgrade to Pro.</div>
+                <Button className="mt-3 w-full rounded-full bg-primary text-primary-foreground" onClick={() => setAdOpen(true)} disabled={bonusMut.isPending}>
+                  <PlayCircle className="mr-2 h-4 w-4" /> Watch ad for +1 snap
+                </Button>
+                <Button variant="outline" className="mt-2 w-full rounded-full" onClick={() => navigate({ to: "/settings" })}>Upgrade to Pro</Button>
               </div>
             )}
           </div>
@@ -98,6 +110,8 @@ function SnapPage() {
       </Card>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">AI nutrition is an estimate — adjust if needed.</p>
+
+      <RewardedAd open={adOpen} onClose={() => setAdOpen(false)} onReward={() => bonusMut.mutate()} />
     </div>
   );
 }
