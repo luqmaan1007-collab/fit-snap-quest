@@ -15,18 +15,37 @@ function startOfTodayIso() {
   return d.toISOString();
 }
 
+function todayUtcDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export const getSnapQuota = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
-    const [{ data: roles }, { count }] = await Promise.all([
+    const [{ data: roles }, { count: used }, { count: bonus }] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
       supabase.from("food_logs").select("*", { count: "exact", head: true })
         .eq("user_id", userId).gte("logged_at", startOfTodayIso()),
+      supabase.from("snap_bonuses").select("*", { count: "exact", head: true })
+        .eq("user_id", userId).eq("earned_on", todayUtcDate()),
     ]);
     const roleNames = (roles ?? []).map((r) => r.role);
     const unlimited = roleNames.includes("pro") || roleNames.includes("owner");
-    return { used: count ?? 0, limit: unlimited ? null : FREE_DAILY_LIMIT, unlimited };
+    const limit = unlimited ? null : FREE_DAILY_LIMIT + (bonus ?? 0);
+    return { used: used ?? 0, limit, unlimited, bonus: bonus ?? 0 };
+  });
+
+export const grantBonusSnap = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { supabase, userId } = context;
+    const { count } = await supabase.from("snap_bonuses").select("*", { count: "exact", head: true })
+      .eq("user_id", userId).eq("earned_on", todayUtcDate());
+    if ((count ?? 0) >= 5) throw new Error("Daily bonus limit reached.");
+    const { error } = await supabase.from("snap_bonuses").insert({ user_id: userId, source: "ad" });
+    if (error) throw new Error(error.message);
+    return { ok: true, bonus: (count ?? 0) + 1 };
   });
 
 export const analyzeSnap = createServerFn({ method: "POST" })
