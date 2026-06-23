@@ -40,6 +40,9 @@ function SnapPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const [preview, setPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+
   async function onFile(f: File) {
     // Compress to ~1024px max edge for cost/latency
     const img = await new Promise<HTMLImageElement>((res, rej) => {
