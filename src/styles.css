@@ -163,3 +163,6 @@
 .tree-grow { transform-origin: bottom center; animation: grow 1.4s cubic-bezier(.2,.8,.2,1) both; }
 .leaf-fall { animation: leafFall linear infinite; }
 .mist-drift { animation: mistDrift 14s ease-in-out infinite; }
+
+/* Hide Lovable badge globally */
+#lovable-badge, [id="lovable-badge"] { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
